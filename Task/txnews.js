@@ -125,11 +125,11 @@ if (isGetCookie) {
       await Pending();
     };
       await StepsTotal();
-      if(getreadred > 0){
+      if(getreadred != 0){
         redbody = `redpack_type=article&activity_id=${actid}`
         await Redpack()
       };
-      if(getvideored>0){
+      if(getvideored != 0){
         redbody = `redpack_type=video&activity_id=${actid}`
         await Redpack()
       };
@@ -329,12 +329,15 @@ function Redpack() {
     setTimeout(()=>{
       const cashUrl = {
         url: `${TX_HOST}activity/redpack/get?isJailbreak=0&${ID}`,
-        headers: {Cookie: cookieVal},
+        headers: {Cookie:cookieVal,"Content-Type": "application/x-www-form-urlencoded","User-Agent": "QQNews/6.3.40 (iPhone; iOS 14.2; Scale/3.00)"},
         body: redbody
       }
+
       $.post(cashUrl, (error, response, data) => {
         let rcash = JSON.parse(data)
+        console.log(data)
         try{
+          if(rcash.data.award.length == 1){
           redpacks = rcash.data.award.num/100
           if (rcash.ret == 0&&redpacks>0&&getreadred > 0){
             redpackres = `【阅读红包】到账`+redpacks+`元 🌷\n`
@@ -344,6 +347,9 @@ function Redpack() {
             redpackres = `【视频红包】到账`+redpacks+`元 🌷\n`
             $.log("视频红包到账"+redpacks+"元\n")
           }
+         } else {
+            $.log(rcash.data.award.length+"个红包到账\n")
+         }
         }
         catch(error){
           console.log("打开红包失败,响应数据: "+ data) 
