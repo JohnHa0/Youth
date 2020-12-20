@@ -15,10 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     env:
-        YOUTH_HEADER: ${{ secrets.YOUTH_HEADER }}
-        YOUTH_ARTBODY: ${{ secrets.YOUTH_ARTBODY }}
-        YOUTH_REDBODY: ${{ secrets.YOUTH_REDBODY }}
-        YOUTH_TIME: ${{ secrets.YOUTH_TIME }}
+        YOUTH_START: ${{ secrets.YOUTH_START }}
+        YOUTH_END: ${{ secrets.YOUTH_END }}
     steps:
       - name: Checkout
         run: |
@@ -32,11 +30,10 @@ jobs:
         run: |
           cd ~/Youth
           npm install
-      - name: '运行 【中青看点】'
-        if: env.YOUTH_HEADER
+      - name: '运行 【中青浏览赚】'
         run: |
           cd ~/Youth
-          node Task/youth.js
+          node Task/youth_gain.js
         env:
           YOUTH_NOTIFY_CONTROL: ${{ secrets.YOUTH_NOTIFY_CONTROL }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
