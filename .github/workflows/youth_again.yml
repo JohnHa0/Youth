@@ -6,10 +6,9 @@ name: 中青浏览赚
 on:
   workflow_dispatch:
   schedule:
-     - cron: '20 2,21 * * *'
+     - cron: '*/20 2,21 * * *'
   watch:
     types: started
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,24 +16,25 @@ jobs:
     env:
         YOUTH_START: ${{ secrets.YOUTH_START }}
         YOUTH_END: ${{ secrets.YOUTH_END }}
+        TZ: Asia/shanghai
     steps:
       - name: Checkout
         run: |
-          git clone https://github.com/Sunert/Scripts.git ~/Youth
+          git clone https://github.com/Sunert/Scripts.git ~/Scripts
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
       - name: npm install
         run: |
-          cd ~/Youth
+          cd ~/Scripts
           npm install
       - name: '运行 【中青浏览赚】'
+        if: env.YOUTH_START
         run: |
-          cd ~/Youth
+          cd ~/Scripts
           node Task/youth_gain.js
         env:
-          YOUTH_NOTIFY_CONTROL: ${{ secrets.YOUTH_NOTIFY_CONTROL }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
@@ -42,5 +42,6 @@ jobs:
           BARK_SOUND: ${{ secrets.BARK_SOUND }}
           DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
           DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+
 
     
